@@ -1,0 +1,29 @@
+.grid {
+  display: grid;
+  margin: 10px auto;
+  width: max-content;
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.wall {
+  background-color: black;
+}
+
+.path {
+  background-color: yellow;
+}
+
+.start {
+  background-color: limegreen;
+}
+
+.end {
+  background-color: red;
+}
