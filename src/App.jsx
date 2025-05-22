@@ -11,6 +11,8 @@ function App() {
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
   const [path, setPath] = useState([]);
+  const [chickenPos, setChickenPos] = useState(null);
+  const [traveledPath, setTraveledPath] = useState([]);
 
   useEffect(() => {
     createNewMaze();
@@ -23,6 +25,9 @@ function App() {
     setStart(start);
     setEnd(target);
     setPath([]);
+    setChickenPos(null); // reset vị trí gà
+    setTraveledPath([]);
+    setChickenPos(null);
   };
 
   const handleSolve = () => {
@@ -36,6 +41,21 @@ function App() {
     const correctedPath = result?.map(([x, y]) => [y, x]);
 
     setPath(correctedPath || []);
+    setTraveledPath([]);
+
+    if (correctedPath) {
+      let step = 0;
+      const interval = setInterval(() => {
+        if (step >= correctedPath.length) {
+          clearInterval(interval);
+          return;
+        }
+        setChickenPos(correctedPath[step]);
+        setTraveledPath(prev => [...prev, correctedPath[step]]);
+        step++;
+      }, 120);
+    }
+
   };
 
   return (
@@ -69,7 +89,15 @@ function App() {
         </button>
       </div>
 
-      <MazeBoard grid={grid} path={path} start={start} end={end} />
+      <MazeBoard
+        grid={grid}
+        traveledPath={traveledPath}
+        start={start}
+        end={end}
+        chickenPos={chickenPos}
+      />
+
+
       <button onClick={handleSolve} style={{ marginTop: '10px' }}>Tìm đường</button>
     </div>
   );

@@ -27,3 +27,14 @@
 .end {
   background-color: red;
 }
+.chicken {
+  background-image: url('https://emojicdn.elk.sh/🐔');
+  background-size: cover;
+  background-position: center;
+  animation: hop 0.15s ease-in-out;
+}
+
+@keyframes hop {
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
