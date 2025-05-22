@@ -53,7 +53,7 @@ function App() {
         setChickenPos(correctedPath[step]);
         setTraveledPath(prev => [...prev, correctedPath[step]]);
         step++;
-      }, 120);
+      }, 60);
     }
 
   };
