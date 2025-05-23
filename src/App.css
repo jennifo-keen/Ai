@@ -38,6 +38,9 @@
   0% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
+.path {
+  background-color: yellow;
+}
 .visited {
   background-color: lightblue;
 }

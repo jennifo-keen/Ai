@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MazeBoard from './MazeBoard';
 import { aStar } from './astar';
-import './App.css'
+import './App.css';
 import generateMaze from './logic/mazeGeneratorDFS';
 
 function App() {
@@ -12,8 +12,9 @@ function App() {
   const [end, setEnd] = useState(null);
   const [path, setPath] = useState([]);
   const [chickenPos, setChickenPos] = useState(null);
-  const [traveledPath, setTraveledPath] = useState([]);
   const [visitedPath, setVisitedPath] = useState([]);
+  const [visitedTraveledPath, setVisitedTraveledPath] = useState([]);
+  const [pathAnimated, setPathAnimated] = useState([]);
   const [pathShown, setPathShown] = useState(false);
 
   useEffect(() => {
@@ -22,56 +23,63 @@ function App() {
 
   const createNewMaze = () => {
     const { map, start, target } = generateMaze(mazeWidth, mazeHeight);
-    console.log("Mê cung:", map);
     setGrid(map);
     setStart(start);
     setEnd(target);
     setPath([]);
-    setChickenPos(null); // reset vị trí gà
-    setTraveledPath([]);
+    setVisitedPath([]);
+    setVisitedTraveledPath([]);
+    setPathAnimated([]);
     setChickenPos(null);
+    setPathShown(false);
   };
 
-const handleSolve = () => {
-  if (!grid.length || !start || !end) return;
+  const handleSolve = () => {
+    if (!grid.length || !start || !end) return;
 
-  const flippedGrid = grid[0].map((_, c) => grid.map(row => row[c]));
-  const flippedStart = [start[1], start[0]];
-  const flippedEnd = [end[1], end[0]];
+    const flippedGrid = grid[0].map((_, c) => grid.map(row => row[c]));
+    const flippedStart = [start[1], start[0]];
+    const flippedEnd = [end[1], end[0]];
 
-  const result = aStar(flippedGrid, flippedStart, flippedEnd); // ✅ gọi xong lưu vào biến
+    const result = aStar(flippedGrid, flippedStart, flippedEnd);
+    const rawPath = result.path;
+    const visited = result.visited;
 
-  const rawPath = result.path;
-  const visited = result.visited;
+    const correctedPath = rawPath?.map(([x, y]) => [y, x]);
+    const correctedVisited = visited?.map(([x, y]) => [y, x]);
 
+    setPath(correctedPath || []);
+    setVisitedPath(correctedVisited || []);
+    setVisitedTraveledPath([]);
+    setPathAnimated([]);
+    setPathShown(false);
 
-  const correctedPath = rawPath?.map(([x, y]) => [y, x]);
-  const correctedVisited = visited?.map(([x, y]) => [y, x]);
+    let step = 0;
+    const interval = setInterval(() => {
+      if (step >= correctedVisited.length) {
+        clearInterval(interval);
+        setChickenPos(correctedPath?.[correctedPath.length - 1] || null);// gà đứng tại đích
+        animatePathReverse(correctedPath);
+        setPathShown(true);
+        return;
+      }
+      setVisitedTraveledPath(prev => [...prev, correctedVisited[step]]);
+      setChickenPos(correctedVisited[step]);
+      step++;
+    }, 60);
+  };
 
-  setPath(correctedPath || []);
-  setTraveledPath([]);
-  setVisitedPath(correctedVisited || []);
-  setPathShown(false); // 👈 quan trọng
-
-  let step = 0;
-  const combined = [...(correctedVisited || [])];
-  if (correctedPath) {
-    combined.push(...correctedPath);
-  }
-
-  const interval = setInterval(() => {
-    if (step >= combined.length) {
-      clearInterval(interval);
-      setPathShown(true); // ✅ chỉ khi đến đích mới hiện màu vàng
-      return;
-    }
-    setTraveledPath(prev => [...prev, combined[step]]);
-    setChickenPos(combined[step]);
-    step++;
-  }, 100);
-};
-
-
+  const animatePathReverse = (path) => {
+    let i = path.length - 1;
+    const interval = setInterval(() => {
+      if (i < 0) {
+        clearInterval(interval);
+        return;
+      }
+      setPathAnimated(prev => [...prev, path[i]]);
+      i--;
+    }, 9);
+  };
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -104,17 +112,16 @@ const handleSolve = () => {
         </button>
       </div>
 
-<MazeBoard
-  grid={grid}
-  visitedPath={visitedPath}
-  path={path}
-  traveledPath={traveledPath}
-  start={start}
-  end={end}
-  chickenPos={chickenPos}
-  pathShown={pathShown}
-/>
-
+      <MazeBoard
+        grid={grid}
+        visitedPath={visitedPath}
+        visitedTraveledPath={visitedTraveledPath}
+        pathAnimated={pathAnimated}
+        start={start}
+        end={end}
+        chickenPos={chickenPos}
+        pathShown={pathShown}
+      />
 
       <button onClick={handleSolve} style={{ marginTop: '10px' }}>Tìm đường</button>
     </div>

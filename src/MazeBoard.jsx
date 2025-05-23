@@ -1,5 +1,4 @@
-function MazeBoard({ grid, visitedPath = [], path = [], traveledPath = [], start, end, chickenPos, pathShown = false }) {
-
+function MazeBoard({ grid, visitedPath = [], visitedTraveledPath = [], pathAnimated = [], start, end, chickenPos, pathShown = false }) {
   if (!Array.isArray(grid) || !Array.isArray(grid[0])) return null;
 
   return (
@@ -16,12 +15,17 @@ function MazeBoard({ grid, visitedPath = [], path = [], traveledPath = [], start
       {grid.map((row, i) =>
         row.map((cell, j) => {
           const isWall = cell === 1;
+
           const isVisited = visitedPath.some(coord =>
-            coord[0] === i && coord[1] === j && traveledPath.some(p => p[0] === i && p[1] === j)
+            Array.isArray(coord) &&
+            coord[0] === i && coord[1] === j &&
+            visitedTraveledPath.some(p => Array.isArray(p) && p[0] === i && p[1] === j)
           );
-          const isPath = pathShown && path.some(coord =>
-            coord[0] === i && coord[1] === j
+
+          const isPath = pathShown && pathAnimated.some(coord =>
+            Array.isArray(coord) && coord[0] === i && coord[1] === j
           );
+
           const isStart = start && i === start[0] && j === start[1];
           const isEnd = end && i === end[0] && j === end[1];
           const isChicken = chickenPos && i === chickenPos[0] && j === chickenPos[1];
