@@ -1,4 +1,5 @@
-function MazeBoard({ grid, traveledPath = [], start, end, chickenPos }) {
+function MazeBoard({ grid, visitedPath = [], path = [], traveledPath = [], start, end, chickenPos, pathShown = false }) {
+
   if (!Array.isArray(grid) || !Array.isArray(grid[0])) return null;
 
   return (
@@ -15,11 +16,12 @@ function MazeBoard({ grid, traveledPath = [], start, end, chickenPos }) {
       {grid.map((row, i) =>
         row.map((cell, j) => {
           const isWall = cell === 1;
-          const isPath =
-            Array.isArray(traveledPath) &&
-            traveledPath.some((coord) =>
-              Array.isArray(coord) && coord[0] === i && coord[1] === j
-            );
+          const isVisited = visitedPath.some(coord =>
+            coord[0] === i && coord[1] === j && traveledPath.some(p => p[0] === i && p[1] === j)
+          );
+          const isPath = pathShown && path.some(coord =>
+            coord[0] === i && coord[1] === j
+          );
           const isStart = start && i === start[0] && j === start[1];
           const isEnd = end && i === end[0] && j === end[1];
           const isChicken = chickenPos && i === chickenPos[0] && j === chickenPos[1];
@@ -27,7 +29,7 @@ function MazeBoard({ grid, traveledPath = [], start, end, chickenPos }) {
           return (
             <div
               key={`${i}-${j}`}
-              className={`cell ${isWall ? 'wall' : ''} ${isPath ? 'path' : ''} ${isStart ? 'start' : ''} ${isEnd ? 'end' : ''} ${isChicken ? 'chicken' : ''}`}
+              className={`cell ${isWall ? 'wall' : ''} ${isPath ? 'path' : (isVisited ? 'visited' : '')} ${isStart ? 'start' : ''} ${isEnd ? 'end' : ''} ${isChicken ? 'chicken' : ''}`}
             />
           );
         })

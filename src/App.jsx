@@ -13,6 +13,8 @@ function App() {
   const [path, setPath] = useState([]);
   const [chickenPos, setChickenPos] = useState(null);
   const [traveledPath, setTraveledPath] = useState([]);
+  const [visitedPath, setVisitedPath] = useState([]);
+  const [pathShown, setPathShown] = useState(false);
 
   useEffect(() => {
     createNewMaze();
@@ -30,33 +32,46 @@ function App() {
     setChickenPos(null);
   };
 
-  const handleSolve = () => {
-    if (!grid.length || !start || !end) return;
+const handleSolve = () => {
+  if (!grid.length || !start || !end) return;
 
-    const flippedGrid = grid[0].map((_, c) => grid.map(row => row[c]));
-    const flippedStart = [start[1], start[0]];
-    const flippedEnd = [end[1], end[0]];
+  const flippedGrid = grid[0].map((_, c) => grid.map(row => row[c]));
+  const flippedStart = [start[1], start[0]];
+  const flippedEnd = [end[1], end[0]];
 
-    const result = aStar(flippedGrid, flippedStart, flippedEnd);
-    const correctedPath = result?.map(([x, y]) => [y, x]);
+  const result = aStar(flippedGrid, flippedStart, flippedEnd); // ✅ gọi xong lưu vào biến
 
-    setPath(correctedPath || []);
-    setTraveledPath([]);
+  const rawPath = result.path;
+  const visited = result.visited;
 
-    if (correctedPath) {
-      let step = 0;
-      const interval = setInterval(() => {
-        if (step >= correctedPath.length) {
-          clearInterval(interval);
-          return;
-        }
-        setChickenPos(correctedPath[step]);
-        setTraveledPath(prev => [...prev, correctedPath[step]]);
-        step++;
-      }, 60);
+
+  const correctedPath = rawPath?.map(([x, y]) => [y, x]);
+  const correctedVisited = visited?.map(([x, y]) => [y, x]);
+
+  setPath(correctedPath || []);
+  setTraveledPath([]);
+  setVisitedPath(correctedVisited || []);
+  setPathShown(false); // 👈 quan trọng
+
+  let step = 0;
+  const combined = [...(correctedVisited || [])];
+  if (correctedPath) {
+    combined.push(...correctedPath);
+  }
+
+  const interval = setInterval(() => {
+    if (step >= combined.length) {
+      clearInterval(interval);
+      setPathShown(true); // ✅ chỉ khi đến đích mới hiện màu vàng
+      return;
     }
+    setTraveledPath(prev => [...prev, combined[step]]);
+    setChickenPos(combined[step]);
+    step++;
+  }, 100);
+};
 
-  };
+
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -89,13 +104,16 @@ function App() {
         </button>
       </div>
 
-      <MazeBoard
-        grid={grid}
-        traveledPath={traveledPath}
-        start={start}
-        end={end}
-        chickenPos={chickenPos}
-      />
+<MazeBoard
+  grid={grid}
+  visitedPath={visitedPath}
+  path={path}
+  traveledPath={traveledPath}
+  start={start}
+  end={end}
+  chickenPos={chickenPos}
+  pathShown={pathShown}
+/>
 
 
       <button onClick={handleSolve} style={{ marginTop: '10px' }}>Tìm đường</button>

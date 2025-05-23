@@ -3,23 +3,26 @@ export function aStar(grid, start, end) {
   const cameFrom = {};
   const gScore = {};
   const fScore = {};
+  const visited = []; // thêm dòng này
 
   const key = (x, y) => `${x},${y}`;
   const neighbors = (x, y) => [
-    [x-1, y], [x+1, y],
-    [x, y-1], [x, y+1]
+    [x - 1, y], [x + 1, y],
+    [x, y - 1], [x, y + 1]
   ];
 
   gScore[key(...start)] = 0;
   fScore[key(...start)] = heuristic(start, end);
 
   while (openSet.length > 0) {
-    // Tìm node có fScore thấp nhất
     openSet.sort((a, b) => fScore[key(...a)] - fScore[key(...b)]);
     const current = openSet.shift();
-    const [x, y] = current;
+    visited.push(current); // lưu lại node đã duyệt
 
-    if (x === end[0] && y === end[1]) return reconstructPath(cameFrom, current);
+    const [x, y] = current;
+    if (x === end[0] && y === end[1]) {
+      return { path: reconstructPath(cameFrom, current), visited }; // trả về cả path và visited
+    }
 
     for (const [nx, ny] of neighbors(x, y)) {
       if (!isValid(nx, ny, grid)) continue;
@@ -35,8 +38,9 @@ export function aStar(grid, start, end) {
     }
   }
 
-  return null; // Không tìm được đường
+  return { path: null, visited }; // không tìm được đường
 }
+
 
 function heuristic(a, b) {
   return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]); // Manhattan
