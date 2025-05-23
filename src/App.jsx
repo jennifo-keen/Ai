@@ -69,17 +69,23 @@ function App() {
     }, 60);
   };
 
-  const animatePathReverse = (path) => {
-    let i = path.length - 1;
-    const interval = setInterval(() => {
-      if (i < 0) {
-        clearInterval(interval);
-        return;
-      }
-      setPathAnimated(prev => [...prev, path[i]]);
-      i--;
-    }, 9);
+const animatePathReverse = (path) => {
+  let i = path.length - 1;
+
+  const animate = () => {
+    if (i < 0) return;
+
+    setPathAnimated(prev => [...prev, path[i]]);
+    i--;
+
+    // Kết hợp animation frame và timeout để có hiệu ứng nhẹ nhàng
+    setTimeout(() => {
+      requestAnimationFrame(animate);
+    }, 20); // 16ms ~ 60fps
   };
+
+  requestAnimationFrame(animate);
+};
 
   return (
     <div style={{ textAlign: 'center' }}>
