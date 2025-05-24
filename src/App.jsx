@@ -87,49 +87,59 @@ const animatePathReverse = (path) => {
   requestAnimationFrame(animate);
 };
 
-  return (
-    <div style={{ textAlign: 'center' }}>
-      <h1>Mê Cung A*</h1>
-      <div style={{ marginBottom: '10px' }}>
-        <label>
-          Width: {mazeWidth}
-          <input
-            type="range"
-            min="5"
-            max="50"
-            value={mazeWidth}
-            onChange={(e) => setMazeWidth(Number(e.target.value))}
-            style={{ margin: '0 10px' }}
-          />
-        </label>
-        <label>
-          Height: {mazeHeight}
-          <input
-            type="range"
-            min="5"
-            max="50"
-            value={mazeHeight}
-            onChange={(e) => setMazeHeight(Number(e.target.value))}
-            style={{ margin: '0 10px' }}
-          />
-        </label>
-        <button onClick={createNewMaze} style={{ marginLeft: '15px' }}>
-          Tạo mê cung mới
-        </button>
+return (
+    <div className="app-container">
+      {/* Maze Section (Left) */}
+      <div className="maze-section">
+        <h1 className="title">🌟 Mê Cung A* 🌟</h1>
+        <MazeBoard
+          grid={grid}
+          visitedPath={visitedPath}
+          visitedTraveledPath={visitedTraveledPath}
+          pathAnimated={pathAnimated}
+          start={start}
+          end={end}
+          chickenPos={chickenPos}
+          pathShown={pathShown}
+        />
       </div>
 
-      <MazeBoard
-        grid={grid}
-        visitedPath={visitedPath}
-        visitedTraveledPath={visitedTraveledPath}
-        pathAnimated={pathAnimated}
-        start={start}
-        end={end}
-        chickenPos={chickenPos}
-        pathShown={pathShown}
-      />
-
-      <button onClick={handleSolve} style={{ marginTop: '10px' }}>Tìm đường</button>
+      {/* Control Section (Right) */}
+      <div className="control-section">
+        <h3 className="section-title">🎮 Điều Khiển</h3>
+        <div className="control-sliders">
+          <label className="slider-label">
+            Chiều Rộng: {mazeWidth} 🐾
+            <input
+              type="range"
+              min="5"
+              max="50"
+              value={mazeWidth}
+              onChange={(e) => setMazeWidth(Number(e.target.value))}
+              className="slider"
+            />
+          </label>
+          <label className="slider-label">
+            Chiều Cao: {mazeHeight} 🐾
+            <input
+              type="range"
+              min="5"
+              max="50"
+              value={mazeHeight}
+              onChange={(e) => setMazeHeight(Number(e.target.value))}
+              className="slider"
+            />
+          </label>
+        </div>
+        <div className="control-buttons">
+          <button className="generate-btn" onClick={createNewMaze}>
+            Tạo Mê Cung Mới ✨
+          </button>
+          <button className="solve-btn" onClick={handleSolve}>
+            Tìm Đường! 🚀
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@ function MazeBoard({ grid, visitedPath = [], visitedTraveledPath = [], pathAnima
       className="grid"
       style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${grid[0].length}, 20px)`,
+        gridTemplateColumns: `repeat(${grid[0].length}, 30px)`,
         gap: '0px',
         margin: '10px auto',
         width: 'max-content'
