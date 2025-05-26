@@ -1,3 +1,6 @@
+import React from 'react';
+import catImg from '/image/cat.png'; // import ảnh con gà
+
 function MazeBoard({ grid, visitedPath = [], visitedTraveledPath = [], pathAnimated = [], start, end, chickenPos, pathShown = false }) {
   if (!Array.isArray(grid) || !Array.isArray(grid[0])) return null;
 
@@ -30,10 +33,19 @@ function MazeBoard({ grid, visitedPath = [], visitedTraveledPath = [], pathAnima
           const isEnd = end && i === end[0] && j === end[1];
           const isChicken = chickenPos && i === chickenPos[0] && j === chickenPos[1];
 
+          // style cho ô con gà
+          const chickenStyle = {
+            backgroundImage: `url(${catImg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            animation: 'hop 0.15s ease-in-out infinite alternate'
+          };
+
           return (
             <div
               key={`${i}-${j}`}
-              className={`cell ${isWall ? 'wall' : ''} ${isPath ? 'path' : (isVisited ? 'visited' : '')} ${isStart ? 'start' : ''} ${isEnd ? 'end' : ''} ${isChicken ? 'chicken' : ''}`}
+              className={`cell ${isWall ? 'wall' : ''} ${isPath ? 'path' : (isVisited ? 'visited' : '')} ${isStart ? 'start' : ''} ${isEnd ? 'end' : ''}`}
+              style={isChicken ? chickenStyle : {}}
             />
           );
         })

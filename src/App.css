@@ -113,13 +113,13 @@ body {
 }
 
 .end {
-  background-image: url('/public/image/chuong.png');
+  background-image: url('/image/chuong.png');
   background-size: cover;
   background-position: center;
 }
 
 .chicken {
-  background-image: url('/public/image/cat.png');
+  background-image: url('/image/cat.png');
   background-size: cover;
   background-position: center;
   animation: hop 0.15s ease-in-out infinite alternate;

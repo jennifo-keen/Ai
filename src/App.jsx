@@ -66,7 +66,7 @@ function App() {
       setVisitedTraveledPath(prev => [...prev, correctedVisited[step]]);
       setChickenPos(correctedVisited[step]);
       step++;
-    }, 60);
+    }, 10);
   };
 
 const animatePathReverse = (path) => {
