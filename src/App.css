@@ -97,7 +97,7 @@ body {
 .cell {
   width: 30px;
   height: 30px;
-  background-color: #b2d286;
+  background-color: #b9d987;
 }
 
 .wall {
@@ -131,7 +131,7 @@ body {
 }
 
 .path {
-  background-image: url('/public/image/vang.png');
+  background-image: url('/public/image/footend.png');
   background-size: cover;
   background-position: center;
 }

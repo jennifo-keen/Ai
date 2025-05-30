@@ -16,7 +16,10 @@ function App() {
   const [visitedTraveledPath, setVisitedTraveledPath] = useState([]);
   const [pathAnimated, setPathAnimated] = useState([]);
   const [pathShown, setPathShown] = useState(false);
-
+  const clickSound = new Audio('./public/sounds/meme.mp3');
+  clickSound.loop = true;
+  const goalSound = new Audio('./public/sounds/hahalinda.mp3');
+  const haha = new Audio('./public/sounds/htv.mp3')
   useEffect(() => {
     createNewMaze();
   }, []);
@@ -34,40 +37,58 @@ function App() {
     setPathShown(false);
   };
 
-  const handleSolve = () => {
-    if (!grid.length || !start || !end) return;
+const handleSolve = () => {
+  if (!grid.length || !start || !end) return;
 
-    const flippedGrid = grid[0].map((_, c) => grid.map(row => row[c]));
-    const flippedStart = [start[1], start[0]];
-    const flippedEnd = [end[1], end[0]];
+  const flippedGrid = grid[0].map((_, c) => grid.map(row => row[c]));
+  const flippedStart = [start[1], start[0]];
+  const flippedEnd = [end[1], end[0]];
 
-    const result = aStar(flippedGrid, flippedStart, flippedEnd);
-    const rawPath = result.path;
-    const visited = result.visited;
+  const result = aStar(flippedGrid, flippedStart, flippedEnd);
+  const rawPath = result.path;
+  const visited = result.visited;
+  haha.play();
+  clickSound.currentTime = 0;
+  clickSound.play(); 
 
-    const correctedPath = rawPath?.map(([x, y]) => [y, x]);
-    const correctedVisited = visited?.map(([x, y]) => [y, x]);
+  const correctedPath = rawPath?.map(([x, y]) => [y, x]);
+  const correctedVisited = visited?.map(([x, y]) => [y, x]);
 
-    setPath(correctedPath || []);
-    setVisitedPath(correctedVisited || []);
-    setVisitedTraveledPath([]);
-    setPathAnimated([]);
-    setPathShown(false);
+  setPath(correctedPath || []);
+  setVisitedPath(correctedVisited || []);
+  setVisitedTraveledPath([]);
+  setPathAnimated([]);
+  setPathShown(false);
 
-    let step = 0;
-    const interval = setInterval(() => {
-      if (step >= correctedVisited.length) {
-        clearInterval(interval);
-        setChickenPos(correctedPath?.[correctedPath.length - 1] || null);// gà đứng tại đích
-        animatePathReverse(correctedPath);
-        setPathShown(true);
-        return;
-      }
-      setVisitedTraveledPath(prev => [...prev, correctedVisited[step]]);
-      setChickenPos(correctedVisited[step]);
-      step++;
-    }, 10);
-  };
+  let step = 0;
+  const interval = setInterval(() => {
+    if (step >= correctedVisited.length) {
+      clearInterval(interval);
+      setChickenPos(correctedPath?.[correctedPath.length - 1] || null);
+
+      clickSound.pause();
+      clickSound.currentTime = 0;
+
+      goalSound.currentTime = 0;
+      goalSound.play(); 
+
+      animatePathReverse(correctedPath);
+      setPathShown(true);
+      return;
+    }
+
+    // Phát âm thanh bước đi mỗi lần di chuyển
+    let stepSound = new Audio('./public/sounds/step.mp3');
+    stepSound.currentTime = 0; 
+    stepSound.play(); 
+
+    setVisitedTraveledPath(prev => [...prev, correctedVisited[step]]);
+    setChickenPos(correctedVisited[step]);
+    step++;
+  }, 120);
+};
+
+
 
 const animatePathReverse = (path) => {
   let i = path.length - 1;
@@ -81,7 +102,7 @@ const animatePathReverse = (path) => {
     // Kết hợp animation frame và timeout để có hiệu ứng nhẹ nhàng
     setTimeout(() => {
       requestAnimationFrame(animate);
-    }, 20); // 16ms ~ 60fps
+    }, 50); // 16ms ~ 60fps
   };
 
   requestAnimationFrame(animate);
