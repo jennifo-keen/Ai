@@ -44,6 +44,34 @@ function carve(x, y, maze, visited, width, height) {
   }
 }
 
+// ✅ Hàm mở ngẫu nhiên các tường để tạo đường phụ
+function openRandomWalls(maze, count = 15) {
+  const height = maze.length;
+  const width = maze[0].length;
+
+  let opened = 0;
+  while (opened < count) {
+    const y = Math.floor(Math.random() * (height - 2)) + 1;
+    const x = Math.floor(Math.random() * (width - 2)) + 1;
+
+    if (maze[y][x] === 1) {
+      // kiểm tra nếu xung quanh có ít nhất 2 đường thì mới mở
+      const neighbors = [
+        maze[y - 1][x],
+        maze[y + 1][x],
+        maze[y][x - 1],
+        maze[y][x + 1]
+      ];
+      const openCount = neighbors.filter(v => v === 0).length;
+      if (openCount >= 2) {
+        maze[y][x] = 0;
+        opened++;
+      }
+    }
+  }
+  return maze;
+}
+
 export default function generateMazeDFS(width = 10, height = 10) {
   const mazeHeight = 2 * height + 1;
   const mazeWidth = 2 * width + 1;
@@ -55,6 +83,9 @@ export default function generateMazeDFS(width = 10, height = 10) {
   carve(0, 0, maze, visited, width, height);
   maze[1][0] = 0;
   maze[mazeHeight - 2][mazeWidth - 1] = 0;
+
+  // ✅ Thêm bước mở tường sau khi DFS
+  openRandomWalls(maze, Math.floor(width * height * 0.1)); // ví dụ mở thêm ~10% tường
 
   const start = [1, 0];
   const target = [mazeHeight - 2, mazeWidth - 1];
