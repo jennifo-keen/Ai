@@ -1,97 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@400;600&display=swap');
+
+/* RESET */
 body {
   margin: 0;
   padding: 0;
-}
-
-.app-container {
+  background-color: #d6e6c2;
+  font-family: 'Quicksand', sans-serif;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-
-  background-color: #d6e6c2; /* Light green to match the maze background */
-  padding: 20px;
-  font-family: 'Arial', 'Helvetica', sans-serif; /* Reliable, widely supported font */
+  align-items: center;
+  min-height: 100vh;
 }
 
+/* CONTAINER CĂN GIỮA */
+.app-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 40px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+/* MÊ CUNG */
 .maze-section {
-  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-  color: #6b8e23; /* Olive green for a natural, earthy tone */
-  font-size: 28px;
-  margin-bottom: 15px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  color: #4b5e23;
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
+/* BẢNG ĐIỀU KHIỂN */
 .control-section {
-  background-color: #f5f5dc; /* Light beige for the control panel */
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
+  background-color: #fffbe6;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  min-width: 250px;
 }
 
 .section-title {
-  color: #6b8e23;
-  font-size: 18px;
-  margin-bottom: 15px;
+  color: #4b5e23;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .control-sliders {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .slider-label {
   display: block;
-  margin-bottom: 10px;
-  color: #555;
+  margin-bottom: 15px;
+  color: #444;
   font-size: 14px;
 }
 
 .slider {
   width: 100%;
-  accent-color: #6b8e23; /* Olive green for the slider */
+  accent-color: #4b5e23;
 }
 
 .control-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.generate-btn, .solve-btn {
+.generate-btn,
+.solve-btn {
   border: none;
-  padding: 10px 15px;
-  border-radius: 10px;
-  font-size: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
 
 .generate-btn {
-  background-color: #add8e6; /* Light blue for the generate button */
-  color: #fff;
+  background-color: #7ecdf2;
+  color: white;
 }
 
 .generate-btn:hover {
-  background-color: #87ceeb;
+  background-color: #5fbfe6;
 }
 
 .solve-btn {
-  background-color: #ff7f50; /* Coral for the solve button */
-  color: #fff;
+  background-color: #ff7f50;
+  color: white;
 }
 
 .solve-btn:hover {
   background-color: #ff6347;
 }
 
+/* GRID MÊ CUNG */
 .grid {
   display: grid;
   margin: 10px auto;
   width: max-content;
-  background-color: #d6e6c2; /* Match the maze background */
+  background-color: #d6e6c2;
 }
 
 .cell {
