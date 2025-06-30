@@ -1,6 +1,3 @@
-// ==============================
-// 🔁 IMPORT CÁC THƯ VIỆN & COMPONENT
-// ==============================
 import React, { useState, useEffect, useRef } from 'react';
 import StartScreen from './StartScreen';
 import MazeBoard from './MazeBoard';
@@ -8,13 +5,9 @@ import { aStar } from './astar';
 import generateMaze from './logic/mazeGeneratorDFS';
 import './App.css';
 
-// ==============================
-// 🔧 COMPONENT CHÍNH
-// ==============================
+// COMPONENT CHÍNH
 function App() {
-  // ============================
-  // 📦 STATE CƠ BẢN
-  // ============================
+  // STATE CƠ BẢN
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [mazeWidth, setMazeWidth] = useState(18);
   const [mazeHeight, setMazeHeight] = useState(9);
@@ -23,9 +16,7 @@ function App() {
   const [end, setEnd] = useState(null);
   const [bgPlaying, setBgPlaying] = useState(false);
 
-  // ============================
-  // 📦 STATE ĐƯỜNG ĐI
-  // ============================
+  // STATE ĐƯỜNG ĐI
   const [path, setPath] = useState([]);
   const [visitedPath, setVisitedPath] = useState([]);
   const [visitedTraveledPath, setVisitedTraveledPath] = useState([]);
@@ -33,23 +24,23 @@ function App() {
   const [chickenPos, setChickenPos] = useState(null);
   const [pathShown, setPathShown] = useState(false);
 
-  // ============================
-  // 🔊 ÂM THANH (DÙNG useRef để không tạo mới mỗi render)
-  // ============================
+
+  //ÂM THANH (DÙNG useRef để không tạo mới mỗi render)
+
   const clickSound = useRef(new Audio('./public/sounds/playing.mp3'));
   const goalSound = useRef(new Audio('./public/sounds/end.mp3'));
   const bgMusic = useRef(new Audio('./public/sounds/start.mp3'));
 
-  // ============================
-  // 🎲 KHỞI TẠO GAME KHI LOAD
-  // ============================
+
+  //KHỞI TẠO GAME KHI LOAD
+
   useEffect(() => {
     createNewMaze();
   }, []);
 
-  // ============================
-  // 🔄 TẠO MÊ CUNG MỚI
-  // ============================
+
+  // TẠO MÊ CUNG MỚI
+
   const createNewMaze = () => {
     const { map, start, target } = generateMaze(mazeWidth, mazeHeight);
     setGrid(map);
@@ -63,13 +54,13 @@ function App() {
     setPathShown(false);
   };
 
-  // ============================
-  // 🧠 GIẢI MÊ CUNG BẰNG A*
-  // ============================
+
+  //GIẢI MÊ CUNG BẰNG A*
+
   const handleSolve = () => {
     if (!grid.length || !start || !end) return;
 
-    // ⛔ Tắt nhạc nền nếu đang phát
+    //Tắt nhạc nền nếu đang phát
     if (bgPlaying) {
       bgMusic.current.pause();
       bgMusic.current.currentTime = 0;
@@ -127,9 +118,9 @@ function App() {
     }, 120);
   };
 
-  // ============================
-  // 🎞️ ANIMATION CHO ĐƯỜNG ĐI NGƯỢC
-  // ============================
+
+  //ANIMATION CHO ĐƯỜNG ĐI NGƯỢC
+
   const animatePathReverse = (path) => {
     let i = path.length - 1;
 
@@ -145,9 +136,9 @@ function App() {
     requestAnimationFrame(animate);
   };
 
-  // ============================
-  // 🚀 GIAO DIỆN MỞ ĐẦU
-  // ============================
+
+  //GIAO DIỆN MỞ ĐẦU
+
   if (showStartScreen) {
     return <StartScreen onStart={() => {
         setShowStartScreen(false);
@@ -158,13 +149,13 @@ function App() {
       }} />;
   }
 
-  // ============================
-  // 🎮 GIAO DIỆN CHÍNH
-  // ============================
+
+  //GIAO DIỆN CHÍNH
+
   return (
     <div className="app-container">
       <div className="maze-section">
-        <h1 className="title">🌟 VÈO TÌM VÀNG 🌟</h1>
+        <h1 className="title">🌟 MÈO TÌM VÀNG 🌟</h1>
         <MazeBoard
           grid={grid}
           visitedPath={visitedPath}

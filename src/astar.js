@@ -1,6 +1,5 @@
-// ==============================
-// 🧠 THUẬT TOÁN A* TÌM ĐƯỜNG
-// ==============================
+
+//THUẬT TOÁN A* TÌM ĐƯỜNG
 export function aStar(grid, start, end) {
   // Danh sách các node cần xét
   const openSet = [start];
@@ -17,10 +16,6 @@ export function aStar(grid, start, end) {
   // Danh sách node đã duyệt (để hiển thị)
   const visited = [];
 
-  // ============================
-  // 📌 HÀM HỖ TRỢ
-  // ============================
-
   // Chuyển tọa độ [x, y] thành chuỗi để làm key
   const key = (x, y) => `${x},${y}`;
 
@@ -34,9 +29,7 @@ export function aStar(grid, start, end) {
   gScore[key(...start)] = 0;
   fScore[key(...start)] = heuristic(start, end);
 
-  // ============================
   // 🔁 VÒNG LẶP TÌM ĐƯỜNG
-  // ============================
   while (openSet.length > 0) {
     // Chọn node có fScore nhỏ nhất
     openSet.sort((a, b) => fScore[key(...a)] - fScore[key(...b)]);
@@ -77,17 +70,13 @@ export function aStar(grid, start, end) {
   return { path: null, visited };
 }
 
-// ==============================
 // 🔧 HÀM ƯỚC LƯỢNG (HEURISTIC)
-// ==============================
 // Dùng khoảng cách Manhattan (thích hợp cho grid 4 hướng)
 function heuristic(a, b) {
   return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
 }
 
-// ==============================
 // ✅ KIỂM TRA TỌA ĐỘ HỢP LỆ
-// ==============================
 function isValid(x, y, grid) {
   return (
     x >= 0 && x < grid.length &&
@@ -96,9 +85,7 @@ function isValid(x, y, grid) {
   );
 }
 
-// ==============================
 // 🔁 DỰNG LẠI ĐƯỜNG ĐI TỪ ĐÍCH VỀ ĐẦU
-// ==============================
 function reconstructPath(cameFrom, current) {
   const path = [current];
   while (cameFrom[`${current[0]},${current[1]}`]) {
